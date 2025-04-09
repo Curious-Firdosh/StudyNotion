@@ -2,7 +2,8 @@
 
 StudyNotion is a fully functional and production-ready Ed-Tech platform built with the MERN stack. It empowers students to learn through curated courses and enables instructors to share their expertise with a global audience. The platform also includes an admin panel for managing courses, users, and analytics.
 
-![StudyNotion Screenshot](https://dummyimage.com/1200x600/ccc/000&text=StudyNotion+Screenshot)
+!StudyNotion HomePage [image](https://github.com/user-attachments/assets/d59d53ad-aa0b-4ed9-994b-0892978201e3)
+
 
 ---
 
@@ -45,7 +46,7 @@ StudyNotion is a fully functional and production-ready Ed-Tech platform built wi
 - Cloudinary for media storage
 - Razorpay integration for payments
 
-### ☁️ Deployment
+### ☁️ Deployment [Not donr Yet]
 - Front-End: [Vercel](https://vercel.com/)
 - Back-End: [Render](https://render.com/) or [Railway](https://railway.app/)
 - Database: [MongoDB Atlas](https://www.mongodb.com/atlas)
