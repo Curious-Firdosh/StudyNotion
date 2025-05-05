@@ -26,7 +26,7 @@ const Home = () => {
             <Link to ={"/signup"} >
               <div className='group mt-16 p-2 items-center rounded-full bg-richblack-800 font-bold text-richblack-200  
               transition-all duration-200 hover:scale-95 w-fit '>
-                  <div className=' flex flex-row items-center text-sm  gap-2 px-10 py-[9px] rounded-full group-hover:bg-richblack-900  '>
+                  <div className=' flex flex-row items-center text-sm  gap-2 px-10 py-[4px] rounded-full group-hover:bg-richblack-900  '>
                       <p>Become an Instructor</p>  
                        <FaArrowRight/>
                   </div>
