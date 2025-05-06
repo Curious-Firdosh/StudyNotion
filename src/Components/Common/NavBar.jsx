@@ -13,23 +13,47 @@ import { ACCOUNT_TYPE } from '../../utils/constans';
 
 const NavBar = () => {
 
-  const sublinks = [
-      {
-         title : "Python",
-         link : "/catalog/Python"
-      },
-      {
-        title : "Web-DevelopMent",
-        link : "/catalog/Web-DevelopMent"
-     }
-  ]
+  // const sublinks = [
+  //     {
+  //        title : "Python",
+  //        link : "/catalog/Python"
+  //     },
+  //     {
+  //       title : "Web-DevelopMent",
+  //       link : "/catalog/Web-DevelopMent"
+  //    }
+  // ]
 
-  // Inmporrt the thing From Reducers 
+  // Inmporrt the thing From Reducers  
   const {token} = useSelector((state) => state.auth)
   const {user} = useSelector ((state) => state.profile)
   const {totalItems} = useSelector((state) => state.cart)
 
   const location = useLocation()
+
+  const [sublinks, setsubLinks] = useState([])
+
+  useEffect(() => {
+      
+    const fetchCategories = async() => {
+        try{
+            const result =  await apiConnector("GET" ,categories.CATEGORIES_API )
+            console.log("Printing Sublinks" , result);
+            setsubLinks(result.data.allCategorys)
+            
+        }
+        catch(error) {
+            console.log("Error While Fetching Categories" , error);
+            
+        }
+    }
+
+    fetchCategories();
+  },[])
+
+  console.log(sublinks);
+  
+
 
   const matchRoute = (route) => {
      return matchPath( {path : route} ,location.pathname )
@@ -69,17 +93,17 @@ const NavBar = () => {
                                               <FaAngleDown />
 
                                               <div 
-                                                className='invisible absolute left-[-95%] top-[50%] opacity-0 translate-y-[50%] transition-all duration-200
+                                                className=' z-[1000] invisible absolute left-[-95%] top-[50%] opacity-0 translate-y-[50%] transition-all duration-200
                                                 flex flex-col rounded-md bg-richblack-5 p-7 group-hover:visible group-hover:opacity-100 lg:w-[300px]'
                                               >
 
                                                     <div className=' absolute h-6 w-6 bg-richblack-5 rotate-45 left-[50%] top-0 translate-x-[-85%] translate-y-[-30%]'></div>
                                                         {
-                                                            sublinks.length  ? 
+                                                          sublinks.length ? 
                                                              (
                                                                 sublinks.map((sublink , index) => (
-                                                                      <Link to={`${sublink.link}`} key={index}>
-                                                                          <p>{sublink.title}</p>
+                                                                      <Link to={`${link.path}`} key={index}>
+                                                                          <p>{sublink.name}</p>
                                                                       </Link>
                                                                 ))
                                                              ) 
