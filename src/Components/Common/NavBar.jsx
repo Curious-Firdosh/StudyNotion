@@ -38,7 +38,6 @@ const NavBar = () => {
     const fetchCategories = async() => {
         try{
             const result =  await apiConnector("GET" ,categories.CATEGORIES_API )
-            console.log("Printing Sublinks" , result);
             setsubLinks(result.data.allCategorys)
             
         }
@@ -51,7 +50,7 @@ const NavBar = () => {
     fetchCategories();
   },[])
 
-  console.log(sublinks);
+
   
 
 
