@@ -15,7 +15,8 @@ const RenderCartCourses = () => {
     <div>
         {
             cart.map((course ,index) => (
-                <div>
+                
+                <div key={index}>
                      <div>
                         <img
                             src={course?.thumbNail}
@@ -26,7 +27,7 @@ const RenderCartCourses = () => {
                        </div>
 
                        <div>
-                            <span>4.8</span>
+                            <span></span>
                             <ReactStars
                               count ={5}
                               size = {20}

@@ -7,7 +7,7 @@ const EnrolledCourse = () => {
 
     const {token} = useSelector((state) => state.auth)
 
-    const [enrolledCourse , setEnrolledCourse] = useState(null)
+    const [enrolledCourse , setEnrolledCourse] = useState([])
 
 
     const EnrolledCoursApiCall = async() => {
@@ -31,8 +31,9 @@ const EnrolledCourse = () => {
         <h1 className='text-white text-4xl'>Enrolled Courses</h1>
 
         {
-            !enrolledCourse ? (<div>You have Not Enrolled Any Course Yet</div>)
-            : !enrolledCourse.length ? (<p>You have Not Enrolled Any Course Yet</p>)
+            enrolledCourse === null || enrolledCourse === undefined ? ( <div>Loading..... </div>)
+            
+            : !enrolledCourse.length  ? (<p>You have Not Enrolled Any Course Yet</p>)
             :(
                 <div> 
                     <div>
