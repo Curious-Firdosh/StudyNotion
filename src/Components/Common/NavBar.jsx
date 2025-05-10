@@ -13,18 +13,6 @@ import { ACCOUNT_TYPE } from '../../utils/constans';
 
 const NavBar = () => {
 
-  // const sublinks = [
-  //     {
-  //        title : "Python",
-  //        link : "/catalog/Python"
-  //     },
-  //     {
-  //       title : "Web-DevelopMent",
-  //       link : "/catalog/Web-DevelopMent"
-  //    }
-  // ]
-
-  // Inmporrt the thing From Reducers  
   const {token} = useSelector((state) => state.auth)
   const {user} = useSelector ((state) => state.profile)
   const {totalItems} = useSelector((state) => state.cart)
