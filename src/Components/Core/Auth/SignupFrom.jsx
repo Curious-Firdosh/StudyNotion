@@ -88,7 +88,7 @@ const handleOnSubmit =  (e) => {
         },
         {
             id: 2,
-            tabName: "Instructor",
+            tabName: "Instructer",
             type: ACCOUNT_TYPE.INSTRUCTOR,
         },
         {

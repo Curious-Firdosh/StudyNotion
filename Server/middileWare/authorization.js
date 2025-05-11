@@ -25,6 +25,9 @@ exports.auth = async(req,res,next ) => {
             const decode = JWT.verify(token , process.env.JWT_SECRET) 
             console.log("decode" , decode); 
             req.User = decode;
+            console.log(req.User);
+            
+            
         }
         catch(err){
             return res.status(400).json({
@@ -51,9 +54,9 @@ exports.auth = async(req,res,next ) => {
 // IsStudent
 exports.isStudent = async(req,res,next) =>{
     try{
-        console.log("User"  , req.user.accountType);
+        console.log("User"  , req.User.accountType);
         
-        if(req.user.accountType !== "Student"){
+        if(req.User.accountType !== "Student"){
             return res.status(401).json({
                 success : false,
                 massege : "This Route Is Protected For Student "
@@ -74,8 +77,11 @@ exports.isStudent = async(req,res,next) =>{
 exports.isInstructer = async(req,res,next) => {
     
     try{
-        console.log("User"  , req.user.accountType);
-        if(req.user.accountType !== "Instructer"){
+        
+        
+        console.log("UserDetails" , req.User.accountType);
+        
+        if( req.User.accountType !== "Instructer"){
             return res.status(401).json({
                 success : false,
                 massege : "This Route Is Protected For Instructer "
@@ -86,7 +92,8 @@ exports.isInstructer = async(req,res,next) => {
     catch(err){
         return res.status(500).json({
             success : false,
-            massege : "User Role Cant Be Verified Plzzz Try Again "
+            massege :  `User Role Cant Be Verified Plzzz Try Again ${err}`
+            
         })
     }
 }
@@ -95,7 +102,9 @@ exports.isInstructer = async(req,res,next) => {
 exports.isAdmin = async(req,res,next) => {
     
     try{
-        if(req.user.accountType !== "Admin"){
+
+
+        if(req.User.accountType !== "Admin"){
             return res.status(401).json({
                 success : false,
                 massege : "This Route Is Protected For Admin "

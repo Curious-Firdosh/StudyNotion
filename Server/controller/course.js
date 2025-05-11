@@ -3,6 +3,7 @@ const User = require("../model/user");
 const Category = require("../model/Category");
 const {uploadImageCloudinary} = require("../utils/imageUploader");
 const { findById } = require('../model/section');
+const { json } = require('express');
 require("dotenv").config();
 
 
@@ -13,13 +14,13 @@ exports.createCourse = async (req,res) => {
         // Featch Data 
         const {courseName ,courseDescreption , whatYouWillLearn , price , tag ,language , category} = req.body;
 
-        const thumbNail = req.files.thumbNail;
+        // const thumbNail = req.files.thumbNail;
 
         console.log("details" , courseName ,courseDescreption ,whatYouWillLearn , price , tag ,language , category );
         
 
-        // //Do Validation With Featched Data
-        if( !courseName || !price  || !category  || !thumbNail || !language || !tag){
+        //Do Validation With Featched Data
+        if( !courseName || !price  || !category ){
             
             return res.status(401).json({
                 success : false,
@@ -29,7 +30,7 @@ exports.createCourse = async (req,res) => {
         };
 
         // Cheack For Instructer
-        const userId = req.user.id;
+        const userId = req.User.id;
 
         const instructerDetails = await User.findById(userId , {
             accountType: "Instructer",
@@ -58,7 +59,7 @@ exports.createCourse = async (req,res) => {
     };
 
     // Upload Image in Cloudinery
-    const thumbnailImage = await uploadImageCloudinary(thumbNail , process.env.FOLDER_NAME);
+    // const thumbnailImage = await uploadImageCloudinary(thumbNail , process.env.FOLDER_NAME);
 
     // Creat Entry fOR New Course
     const newCourse = await Course.create({
@@ -69,8 +70,8 @@ exports.createCourse = async (req,res) => {
         price : price ,
         language  : language, 
         category: categoryDetails._id,
-        thumbNail : thumbnailImage.secure_url,
-        tag : tag
+        // thumbNail : thumbnailImage.secure_url,
+        // tag : tag
     });
 
     // update User [instructer] add the new course to the instructer 
@@ -107,7 +108,8 @@ exports.createCourse = async (req,res) => {
         console.log("Error While Creating Course -->", err)
         res.status(500).json({
             success: false,
-            message : "Course Creation Failed ❌❌"
+            message : `Course Creation Failed ❌❌ ${err}`
+            
         })
     }
 };
@@ -218,5 +220,96 @@ exports.getInstructerCourses = async(req,res) => {
 };
 
 // Delete Course 
+
+// Edit Course Deatails
+
+exports.editCourse = async(req,res) => {
+    try{
+
+         const updates = req.body  // Data From Frontend Tha tIS IN the form we mad ein object 
+         const {courseId} = req.body
+
+         const course = await Course.findById(courseId)
+
+         if(!course){
+            return res.status(404).json({
+                success: false,
+                massege : "No Course Found"
+            })
+         }
+
+         if(req.files){
+              console.log("thumbnail update")
+              const thumbnail = req.files.thumbNail
+              const thumbnailImage = await uploadImageCloudinary(
+                thumbnail ,
+                process.env.FOLDER_NAME
+              )
+            Course.thumbNail = thumbnailImage.secure_url 
+         }
+
+        // Update only the fields that are present in the request body 
+        for (const key in updates) {
+            if (updates.hasOwnProperty(key)) {
+                if (key === "tag" || key === "instructions") {
+                    try {
+                        if (typeof updates[key] === "string") {
+                            course[key] = JSON.parse(updates[key]);
+                        } else {
+                            course[key] = updates[key]; // already an array/object
+                        }
+                    } catch (err) {
+                        console.error(`Failed to parse ${key}:`, err);
+                        return res.status(400).json({
+                            success: false,
+                            message: `Invalid format for ${key}. It should be a valid JSON array.`,
+                        });
+                    }
+                } else {
+                    course[key] = updates[key];
+                }
+            }
+        }
+
+
+          await course.save(); 
+
+        const updatedCourse = await Course.findOne({
+            _id: courseId,
+        }).populate({
+            path: "instructer",
+            populate: {
+                path: "additionalDetails",
+            },
+      })
+      .populate("category")
+      .populate("ratingAndReviews")
+      .populate({
+        path: "courseContent",
+        populate: {
+          path: "subSection",
+        },
+      })
+      .exec()
+
+      
+        res.status(200).json({
+            success: true,
+            message: "Course updated successfully",
+            data: updatedCourse,
+        }) 
+
+
+
+    }
+   catch (error) {
+        console.error(error)
+         res.status(500).json({
+            success: false,
+            message: "Internal server error",
+            error: error.message,
+        })
+     }
+}
 
 
