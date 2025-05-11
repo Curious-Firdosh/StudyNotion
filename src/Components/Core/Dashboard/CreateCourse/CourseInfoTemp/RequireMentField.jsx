@@ -23,11 +23,6 @@ const RequireMentField = ({name , label , register , errors , setValue , getValu
        }
     }
 
-    console.log(requirement);
-    console.log(requirementList);
-    
-    
-    
     const handleRemove = (index) => {
         const updateRequireMent = [...requirementList];
         updateRequireMent.splice(index , 1)
@@ -38,7 +33,7 @@ const RequireMentField = ({name , label , register , errors , setValue , getValu
   return (
     <div>
         
-        <label htmlFor = {name}>{label} <sup>*</sup></label>
+        <label htmlFor = {name}> {label} <sup>*</sup></label>
         <div className='text-black'>
              <input
                 placeholder='Enter Requirement'

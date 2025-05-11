@@ -20,7 +20,7 @@ exports.createCourse = async (req,res) => {
         
 
         //Do Validation With Featched Data
-        if( !courseName || !price  || !category ){
+        if( !courseName || !price  || !category || !tag ){
             
             return res.status(401).json({
                 success : false,
@@ -71,7 +71,7 @@ exports.createCourse = async (req,res) => {
         language  : language, 
         category: categoryDetails._id,
         // thumbNail : thumbnailImage.secure_url,
-        // tag : tag
+        tag : tag
     });
 
     // update User [instructer] add the new course to the instructer 

@@ -1,14 +1,16 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-import CourseInformationform from './CourseInformationform'
+import { useDispatch, useSelector } from 'react-redux'
+import CourseInformationform from './CourseInfoTemp/CourseInformationform'
 import { FaCheck } from 'react-icons/fa'
-import CourseBuilderForm from './CourseBuilderForm'
-import CoursePublish from './CoursePublish'
+import CourseBuilderForm from './CourseBuilder/CourseBuilderForm'
+import CoursePublish from './CreatePublish/CoursePublish'
+import { setStep } from '../../../../Slices/courseSlice'
 
 
 const RenderSteps = () => {
 
-let  step = useSelector((state) => state.course.step)
+let step = useSelector((state) => state.course.step)
+const dispatch = useDispatch()
 
 console.log("Current Step;" , step)
 
@@ -25,7 +27,9 @@ console.log("Current Step;" , step)
       id: 3,
       title: "Publish",
     },
-  ]
+  ];
+
+  
 
  return (
     <>
@@ -41,7 +45,7 @@ console.log("Current Step;" , step)
                   step === item.id
                     ? "border-yellow-50 bg-yellow-900 text-yellow-50"
                     : "border-richblack-700 bg-richblack-800 text-richblack-300"
-                } ${step > item.id && "bg-yellow-50 text-yellow-50"}} `}
+                } ${step > item.id && "bg-yellow-50 text-yellow-50"}`}
               >
                 {step > item.id ? (
                   <FaCheck className="font-bold text-richblack-900" />
@@ -87,7 +91,7 @@ console.log("Current Step;" , step)
         
     {step === 1 && <CourseInformationform/>}
     {step === 2 && <CourseBuilderForm/>}
-    {step === 3 && <CoursePublish/>}
+    {/* {step === 3 && <CoursePublish/>} */}
     </>
   )
 
