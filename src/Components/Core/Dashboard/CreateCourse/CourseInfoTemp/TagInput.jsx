@@ -8,6 +8,9 @@ const TagInput = ({label , name, placeholder ,register , setValue , getValues })
   const [tags , setTags] = useState([])
   const [inputValue , setInputValue] = useState('')
 
+
+
+
   useEffect(() => {
       setValue(name ,tags )
   },[tags])
@@ -33,6 +36,7 @@ const TagInput = ({label , name, placeholder ,register , setValue , getValues })
     setTags(updatedTags)
   }
 
+  
 
 
   return (

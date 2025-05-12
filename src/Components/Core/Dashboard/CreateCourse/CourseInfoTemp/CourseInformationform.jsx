@@ -61,7 +61,7 @@ const CourseInformationform = () => {
             if (editCourse) {
                 // console.log("data populated", editCourse)
                 setValue("courseTitle", course.courseName)
-                setValue("courseShortDesc", course.courseDescription)
+                setValue("courseShortDesc", course.courseDescreption)
                 setValue("coursePrice", course.price)
                 setValue("courseTags", course.tag)
                 setValue("courseBenefits", course.whatYouWillLearn)
@@ -126,11 +126,11 @@ const CourseInformationform = () => {
                     formdata.append("instructions" ,JSON.stringify(data.courseRequirements) )
                 }
                 
-                if(currentValue.courseTags !== course.tag){
-                    formdata.append("courseName" ,JSON.parse(data.courseTags) )
+                if(currentValue.courseTags.toString() !== course.tag.toString()){
+                    formdata.append("courseTags" ,JSON.stringify(data.courseTags) )
                 }
 
-                
+                console.log("HelloJI  ")
 
                 setLoading(true)
                 const result = await editCourseDetails(formdata , token)
@@ -306,6 +306,7 @@ const CourseInformationform = () => {
                 }
 
                 <IconButton
+                    disabled={loading}
                     text = {!editCourse  ? "Next" : "Save Changes"}
                 />
             </div>
