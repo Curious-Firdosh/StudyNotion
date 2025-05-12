@@ -12,7 +12,7 @@ exports.createCourse = async (req,res) => {
     
     try{
         // Featch Data 
-        const {courseName ,courseDescreption , whatYouWillLearn , price , tag ,language , category} = req.body;
+        const {courseName ,courseDescreption , courseContent , whatYouWillLearn , price , tag ,language , category} = req.body;
 
         // const thumbNail = req.files.thumbNail;
 
@@ -61,17 +61,20 @@ exports.createCourse = async (req,res) => {
     // Upload Image in Cloudinery
     // const thumbnailImage = await uploadImageCloudinary(thumbNail , process.env.FOLDER_NAME);
 
+    const parsedTags = typeof tag === "string" ? JSON.parse(tag) : tag;
+
     // Creat Entry fOR New Course
     const newCourse = await Course.create({
         courseName,
         courseDescreption,
+        courseContent,
         instructer:  instructerDetails._id,
         whatYouWillLearn :  whatYouWillLearn  , 
         price : price ,
         language  : language, 
         category: categoryDetails._id,
         // thumbNail : thumbnailImage.secure_url,
-        tag : tag
+        tag : parsedTags
     });
 
     // update User [instructer] add the new course to the instructer 
@@ -287,7 +290,7 @@ exports.editCourse = async(req,res) => {
       .populate({
         path: "courseContent",
         populate: {
-          path: "subSection",
+          path: "subsections",
         },
       })
       .exec()

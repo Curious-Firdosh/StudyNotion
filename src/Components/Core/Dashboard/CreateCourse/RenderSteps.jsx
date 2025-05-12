@@ -91,7 +91,7 @@ console.log("Current Step;" , step)
         
     {step === 1 && <CourseInformationform/>}
     {step === 2 && <CourseBuilderForm/>}
-    {/* {step === 3 && <CoursePublish/>} */}
+    {step === 3 && <CoursePublish/>}
     </>
   )
 

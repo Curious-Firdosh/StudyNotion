@@ -30,7 +30,7 @@ exports.createSection = async(req,res) => {
                                                     .populate ({
                                                         path : "courseContent",
                                                         populate : {
-                                                          path : "subsections"  
+                                                          path : "Section"  
                                                         },
                                                     })
                                                     .exec()
