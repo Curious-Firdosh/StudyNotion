@@ -66,12 +66,16 @@ const CourseBuilderForm = () => {
               sectionId : editSectionName,
               courseId : course._id
           } , token)
+          console.log("resultSection" , result);
+
         }
         else{
            result = await createSection({
               sectionName: data.sectionName,
               courseId : course._id,
            } , token)
+           console.log("resultSection" , result);
+           
         }
 
         // Update Values 
@@ -82,6 +86,9 @@ const CourseBuilderForm = () => {
             setValue("sectionName" , "")
         }
 
+        console.log("edit" , result);
+        
+
         setLoading(false)
   }
 
@@ -90,7 +97,6 @@ const CourseBuilderForm = () => {
     dispatch(setEditCourse(true))
   }
 
-  console.log(course.courseContent)
 
   return (
     <div className='bg-richblack-800 p-5 rounded-sm '>
@@ -147,7 +153,7 @@ const CourseBuilderForm = () => {
           )
         }
 
-        <div className='flex justify-end gap-x-3'>
+        <div className='flex justify-end gap-x-3 mt-10 '>
         
             <button 
               onClick={goBack}
