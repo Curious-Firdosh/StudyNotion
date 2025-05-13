@@ -32,7 +32,7 @@ exports.auth = async(req,res,next ) => {
         catch(err){
             return res.status(400).json({
                 success : false,
-                message : "Token is InValid"
+                message : `Token is InValid ${err}`
                 
             })
         };
