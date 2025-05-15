@@ -9,7 +9,7 @@ import { RxCross1 } from "react-icons/rx";
 import toast from 'react-hot-toast';
 import IconButton from '../../../../Common/IconButton';
 
-const SubSectioniModal = ({ modaldata,setModalData, add = false,  edit = false , view = false,}) => {
+const SubSectioniModal = ({ modaldata,setModalData, add = false,  View = false,  edit = false  }) => {
 
 
     const {
@@ -34,7 +34,8 @@ const SubSectioniModal = ({ modaldata,setModalData, add = false,  edit = false ,
     // We WANT in First Render When  iGO tO View OR Edit Subsection That Values Meet Me Filled
     useEffect(()=>{
 
-      if(view || edit){
+      if(View || edit){
+    
           setValue("lectureTitle" , modaldata.title)
           setValue("lectureDescription" , modaldata.desc)
           // setValue("lectureVideo" , modaldata.videoUrl)
@@ -64,28 +65,31 @@ const SubSectioniModal = ({ modaldata,setModalData, add = false,  edit = false ,
 
       const currentValue = getValues()
 
-      const formdata = new FormData();
-
-      formdata.append("SectionId" ,modaldata.sectionId)
-      formdata.append("subSectionId" , modaldata._id)
+      const formdata = new FormData()
+  
+     formdata.append("sectionId", modaldata.sectionId);
+     formdata.append("subSectionId", modaldata._id);
 
       if(currentValue.lectureTitle !== modaldata.title)
       {
-        formdata.append("title" ,currentValue.lectureTitle )
+         formdata.append("title", currentValue.lectureTitle);
       }
       if(currentValue.lectureDescription !== modaldata.desc)
       {
-        formdata.append("desc" ,currentValue.lectureDescription )
+         formdata.append("description", currentValue.lectureDescription);
       }
+      
       // if(currentValue.lectureVideo !== modaldata.videoUrl)
       // {
       //   formdata.append("videoUrl" ,currentValue.lectureVideo )
       // }
 
       //! Do Api Call
-      const result = await updateSubSection(formdata , token)
+      const result =  updateSubSection(formdata , token)
+
       
       if(result){
+
         dispatch(setCourse(result))
       }
 
@@ -94,9 +98,11 @@ const SubSectioniModal = ({ modaldata,setModalData, add = false,  edit = false ,
 
 
 
+
+
   const onSubmit = async(data) => {
         
-      if(view) 
+      if(View) 
             return;
       
       if(edit) {
@@ -105,7 +111,7 @@ const SubSectioniModal = ({ modaldata,setModalData, add = false,  edit = false ,
           }
           else{
               //edit karo 
-              await handleEditSubsection()
+             handleEditSubsection()
           }
           return
       }
@@ -138,7 +144,7 @@ const SubSectioniModal = ({ modaldata,setModalData, add = false,  edit = false ,
     <div>
 
         <div>
-            <h1>{view && "Viewing" } {edit && "Editing" } {add && "Adding"} Lectures</h1>
+            <h1>{View && "Viewing" } {edit && "Editing" } {add && "Adding"} Lectures</h1>
             <RxCross1 onClick={() => setModalData(null)}/>
         </div>
 
@@ -177,7 +183,7 @@ const SubSectioniModal = ({ modaldata,setModalData, add = false,  edit = false ,
               </div>
 
               {
-                !view && (
+                !View && (
                   <IconButton
                       type={"submit"}
                       text={edit ? "Save Changes" : "Save"}
