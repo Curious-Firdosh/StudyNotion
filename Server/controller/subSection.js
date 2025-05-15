@@ -26,45 +26,47 @@ exports.createSubsection = async(req,res) => {
             // upload Video TO Cloudinary and then give URL
             // const UploadVideo = await uploadImageCloudinary(video ,process.env.FOLDER_NAME);
 
-            // create SUBSECTION    
-            const subSectionDetails = await SubSection.create({
-                title:title,
-                // timeDuration : timeDuration,
-                desc : desc,
-                // videoUrl : UploadVideo.secure_url
-            });
+            // Step 1: Update the section
+            const subsectionDetails = await SubSection.create({
+                title : title,
+                desc : desc
+            })
 
-            // Update Section By SubSection OBJECT ID
-            const updatedSection = await Section.findByIdAndUpdate(
-                                                            sectionId,
-                                                            {
-                                                                $push: {
-                                                                subsections: subSectionDetails._id
-                                                                }
-                                                            },
-                                                            { new: true }).populate("subsections");
+            await Section.findByIdAndUpdate(
+            sectionId,
+            {
+                $push: { subsections: subsectionDetails._id }
+            },
+            { new: true }
+            );
 
 
+            const section = await Section.findById(sectionId)
+            
+            if (!section) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Section Not Found",
+                });
+            }
+            const sectionCourseId = section.course
 
-
-            // ✅ Get the course and populate deeply
-            const course = await Course.findById(updatedSection.courseId)
-                                                                    .populate({
-                                                                        path: "courseContent",
-                                                                        populate: {
-                                                                        path: "subsections"
-                                                                        }
-                                                                    })
-                                                                    .exec();
-
+            const UpdatedCourse = await Course.findById(sectionCourseId)
+                                                        .populate({
+                                                            path : "courseContent",
+                                                            populate : {
+                                                                path : "subsections"
+                                                            }
+                                                        }).exec()
 
             // Send SuccessFull Response 
-            return res.status(200).json({
+             return res.status(200).json({
                 success: true,
                 message: "SubSection Created Successfully",
-                updatedCourseDetails: course
-             });
+                data: UpdatedCourse
+            });
 
+           
 
     }
     catch(err) {
@@ -110,13 +112,23 @@ exports.updateSubsection = async(req,res) => {
         
      await subSection.save();
 
-     const UpdatedSection = await section.findById(sectionId)
+     const UpdatedSection = await Section.findById(sectionId)
                                                 .populate('subsections')
                                                 .exec()
 
+     const sectioncourseId = UpdatedSection.course 
+     console.log(sectioncourseId )
+     const UpdatedCourse = await Course.findById(sectioncourseId)
+                                        .populate({
+                                                path : "courseContent",
+                                                populate : {
+                                                path : "subsections"
+                                                }
+                                            }).exec()
+
      return res.status(200).json({
         success : true ,
-        data : UpdatedSection ,
+        data : UpdatedCourse,
         message: "Section updated successfully",
      })
 }
@@ -147,12 +159,22 @@ exports.deletesubSection = async (req,res) => {
                   .json({ success: false, message: "SubSection not found" })
               }
 
-            const UpdatedSection  = await section.findById(sectionId)
+            const UpdatedSection  = await Section.findById(sectionId)
                                                   .populate("subsections")
+
+
+             const sectioncourseId = UpdatedSection.course 
+            const UpdatedCourse = await Course.findById(sectioncourseId)
+                                        .populate({
+                                                path : "courseContent",
+                                                populate : {
+                                                path : "subsections"
+                                                }
+                                            }).exec()
             return res.json({
                 success: true,
                 message: "SubSection deleted successfully",
-                data: UpdatedSection,
+                data: UpdatedCourse,
               })
     }
     catch(err) {

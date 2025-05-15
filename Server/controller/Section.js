@@ -1,6 +1,7 @@
 const Section = require("../model/section");
 const Course = require("../model/Course");
-const SubSection = require("../model/subSection")
+const SubSection = require("../model/subSection");
+const section = require("../model/section");
 
 
 // Create Section
@@ -17,7 +18,7 @@ exports.createSection = async(req,res) => {
             })
         };
         // Create Section
-        const newSection = await Section.create({sectionName})
+        const newSection = await Section.create({sectionName , course :courseId})
 
         //update that section in course with object ID
         const updateCourseDetails = await Course.findByIdAndUpdate(
@@ -39,7 +40,7 @@ exports.createSection = async(req,res) => {
         return res.status(200).json({
             success : true,
             message : "Section Created SuccessFully ",
-            updateCourseDetails
+            data : updateCourseDetails
         })
 
     }
@@ -78,7 +79,7 @@ exports.updateSection = async(req,res) => {
              );
 
              // UPdate The Course With Section
-             const course = await Section.findByIdAndUpdate(courseId).
+             const course = await Course.findByIdAndUpdate(courseId).
                                                             populate({
                                                                 path : "courseContent",
                                                                 populate :{
@@ -89,7 +90,7 @@ exports.updateSection = async(req,res) => {
              // Send Response
              return res.status(200).json({
                 success : true,
-                message : `"Section Updated SuccessFully " ${updateSectionDetails}`,
+                message : section,
                 data : course
             })
 
