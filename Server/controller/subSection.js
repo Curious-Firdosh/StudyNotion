@@ -3,53 +3,67 @@ const Section = require("../model/section");
 const subSection = require("../model/subSection");
 const SubSection = require("../model/subSection");
 const {uploadImageCloudinary} =require("../utils/imageUploader")
+const Course = require('../model/Course')
+
 require("dotenv").config()
 // Create SubSection 
 
 exports.createSubsection = async(req,res) => {
     try{
             // data Fetch From Subsection FoR Input 
-            const { title , timeDuration , desc ,sectionId } = req.body;
+            const { title  , desc ,sectionId } = req.body;
 
             //EXTARCT Video FroM Files
-            const video = req.files.videoFile;
+            // const video = req.files.videoFile;
 
-            // data Validation
-            if( !title || !timeDuration || !desc || !video ||!sectionId) {
+            // data Validation also add //video || !timeDuration
+            if( !title || !desc  ||!sectionId) {
                 return res.status(401).json({
                     success : false,
                     message : "All Fields Are Requiredl"
                 })
             };
             // upload Video TO Cloudinary and then give URL
-            const UploadVideo = await uploadImageCloudinary(video ,process.env.FOLDER_NAME);
+            // const UploadVideo = await uploadImageCloudinary(video ,process.env.FOLDER_NAME);
 
             // create SUBSECTION    
             const subSectionDetails = await SubSection.create({
                 title:title,
-                timeDuration : timeDuration,
+                // timeDuration : timeDuration,
                 desc : desc,
-                videoUrl : UploadVideo.secure_url
+                // videoUrl : UploadVideo.secure_url
             });
 
             // Update Section By SubSection OBJECT ID
-            const UpdatedSection = await Section.findByIdAndUpdate(
-                                                   {_id :sectionId},
-                                                    {
-                                                        $push: {
-                                                            subsections : subSectionDetails._id
-                                                        }
-                                                    },
-                                                    {new : true}
-                                                ).populate("subsections")
+            const updatedSection = await Section.findByIdAndUpdate(
+                                                            sectionId,
+                                                            {
+                                                                $push: {
+                                                                subsections: subSectionDetails._id
+                                                                }
+                                                            },
+                                                            { new: true }).populate("subsections");
+
+
+
+
+            // ✅ Get the course and populate deeply
+            const course = await Course.findById(updatedSection.courseId)
+                                                                    .populate({
+                                                                        path: "courseContent",
+                                                                        populate: {
+                                                                        path: "subsections"
+                                                                        }
+                                                                    })
+                                                                    .exec();
+
 
             // Send SuccessFull Response 
             return res.status(200).json({
-                success : true,
-                data : UpdatedSection,
-                message : "SubSection Created SuccesssFully"
-                
-            })
+                success: true,
+                message: "SubSection Created Successfully",
+                updatedCourseDetails: course
+             });
 
 
     }
@@ -85,13 +99,13 @@ exports.updateSubsection = async(req,res) => {
             subSection.desc = description
         }
 
-        if(req.files && req.files.videoFile !== undefined) {
-            const video = req.files.video
-            const uploadDetails = await uploadImageToCloudinary(video, process.env.FOLDER_NAME)
+        // if(req.files && req.files.videoFile !== undefined) {
+        //     const video = req.files.video
+        //     const uploadDetails = await uploadImageToCloudinary(video, process.env.FOLDER_NAME)
 
-            subSection.videoUrl = uploadDetails.secure_url ,
-            subSection.timeDuration = `${uploadDetails.duration}`
-        }
+        //     subSection.videoUrl = uploadDetails.secure_url ,
+        //     subSection.timeDuration = `${uploadDetails.duration}`
+        // }
 
         
      await subSection.save();
@@ -102,7 +116,7 @@ exports.updateSubsection = async(req,res) => {
 
      return res.status(200).json({
         success : true ,
-        UpdatedSection ,
+        data : UpdatedSection ,
         message: "Section updated successfully",
      })
 }

@@ -19,7 +19,8 @@ const CourseBuilderForm = () => {
   const {token} = useSelector((state) => state.auth)
 
   const dispatch = useDispatch()
-  console.log("Course" , course) 
+
+  console.log("CourseCONTENT" , course?.courseContent) 
 
   const [editSectionName , SeteditSectionName] = useState(null)
   const [loading , setLoading] = useState(false)
@@ -30,16 +31,13 @@ const CourseBuilderForm = () => {
   }
 
   const goToNext = () => {
-      if(course.courseContent.length === 0 ){
+      if(course?.courseContent?.length === 0 ){
           toast.error("Please Add Atleast One Section")
           return;
       }
-      if(course.courseContent.some((section) => section.subSection.length === 0 )){
-         toast.error("Please Add Atleast One Lecture in Each Section")
-         return;
-      }
+      if(course.courseContent.some((section) => !Array.isArray(section.subsections) || section.subsections.length === 0 ))
       dispatch(setStep(3))
-      console.log("SJJSIDJF");
+
       
   }
 
@@ -148,7 +146,7 @@ const CourseBuilderForm = () => {
 
         
         {
-          course.courseContent.length > 0 && (
+           course?.courseContent?.length > 0 && (
             <NestedView handleChangeEditSection = {handleChangeEditSection}/>
           )
         }
