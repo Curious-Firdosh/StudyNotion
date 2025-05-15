@@ -11,7 +11,7 @@ require("dotenv").config()
 exports.createSubsection = async(req,res) => {
     try{
             // data Fetch From Subsection FoR Input 
-            const { title  , desc ,sectionId } = req.body;
+            const { sectionId ,title , desc , } = req.body;
 
             //EXTARCT Video FroM Files
             // const video = req.files.videoFile;
@@ -80,68 +80,79 @@ exports.createSubsection = async(req,res) => {
 };
 
 // Update SubSection
-exports.updateSubsection = async(req,res) => {
-    try{
-        const { sectionId, subSectionId, title, description } = req.body
+exports.updateSubsection = async (req, res) => {
+  try {
+    const { sectionId, subSectionId, title, description } = req.body;
 
-        const subSection = await SubSection.findById(subSectionId)
-
-        if (!subSection) {
-            return res.status(404).json({
-              success: false,
-              message: "SubSection not found",
-            })
-        }
-
-        if (title !== undefined) {
-            subSection.title = title
-          }
-      
-        if (description !== undefined) {
-            subSection.desc = description
-        }
-
-        // if(req.files && req.files.videoFile !== undefined) {
-        //     const video = req.files.video
-        //     const uploadDetails = await uploadImageToCloudinary(video, process.env.FOLDER_NAME)
-
-        //     subSection.videoUrl = uploadDetails.secure_url ,
-        //     subSection.timeDuration = `${uploadDetails.duration}`
-        // }
-
-        
-     await subSection.save();
-
-     const UpdatedSection = await Section.findById(sectionId)
-                                                .populate('subsections')
-                                                .exec()
-
-     const sectioncourseId = UpdatedSection.course 
-     console.log(sectioncourseId )
-     const UpdatedCourse = await Course.findById(sectioncourseId)
-                                        .populate({
-                                                path : "courseContent",
-                                                populate : {
-                                                path : "subsections"
-                                                }
-                                            }).exec()
-
-     return res.status(200).json({
-        success : true ,
-        data : UpdatedCourse,
-        message: "Section updated successfully",
-     })
-}
-    catch(err) {
-        console.log("Error While Updating SubSection" , err);
-        return res.status(500).json({
-            success : false,
-            data : err.message,
-            message : "Unable To Update SUBSection"
-        })
+    // Check for required IDs
+    if (!sectionId || !subSectionId) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing sectionId or subSectionId",
+      });
     }
-    
-}
+
+    // Find the subsection
+    const subSection = await SubSection.findById(subSectionId);
+    if (!subSection) {
+      return res.status(404).json({
+        success: false,
+        message: "SubSection not found",
+      });
+    }
+
+    // Update fields if they are sent
+    if (title !== undefined) subSection.title = title;
+    if (description !== undefined) subSection.desc = description;
+
+    // Optional: Handle file upload if video is being updated
+    // if (req.files && req.files.video) {
+    //   const uploadDetails = await uploadImageToCloudinary(req.files.video, process.env.FOLDER_NAME);
+    //   subSection.videoUrl = uploadDetails.secure_url;
+    //   subSection.timeDuration = `${uploadDetails.duration}`;
+    // }
+
+    await subSection.save();
+
+    // Populate the updated section
+    const UpdatedSection = await Section.findById(sectionId)
+      .populate("subsections")
+      .exec();
+
+
+    const section = await Section.findById(sectionId)
+    const SectionCourseId = section.course
+
+    const course = await Course.findById(SectionCourseId)
+    .populate({
+        path : "courseContent",
+        populate : {
+          path : "subsections"
+        }
+    }).exec()
+
+
+    if (!UpdatedSection) {
+      return res.status(404).json({
+        success: false,
+        message: "Section not found for the given sectionId",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: course,
+      message: "SubSection updated successfully",
+    });
+  } catch (err) {
+    console.error("Error While Updating SubSection:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Unable To Update SubSection",
+      data: err.message,
+    });
+  }
+};
 // Delete SubSECTION
 
 exports.deletesubSection = async (req,res) => {
