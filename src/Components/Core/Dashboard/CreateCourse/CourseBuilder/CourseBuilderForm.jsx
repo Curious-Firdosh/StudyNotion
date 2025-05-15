@@ -31,14 +31,16 @@ const CourseBuilderForm = () => {
   }
 
   const goToNext = () => {
-      if(course?.courseContent?.length === 0 ){
-          toast.error("Please Add Atleast One Section")
-          return;
+      if (course?.courseContent?.length === 0) {
+        toast.error("Please Add Atleast One Section");
+        return;
       }
-      if(course.courseContent.some((section) => !Array.isArray(section.subsections) || section.subsections.length === 0 ))
-      dispatch(setStep(3))
+      if (course.courseContent.some(section => !Array.isArray(section.subsections) || section.subsections.length === 0)) {
+        toast.error("All sections must have at least one subsection");
+        return;
+      }
+      dispatch(setStep(3));
 
-      
   }
 
 

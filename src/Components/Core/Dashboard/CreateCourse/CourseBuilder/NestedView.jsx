@@ -45,12 +45,13 @@ const NestedView = ({handleChangeEditSection}) => {
       
     }
 
-    const handleDeleteSubSection = async(subsectionId , sectionId) => {
+    const handleDeleteSubSection = async(subSectionId, sectionId ) =>  {
       
+      console.log(sectionId , subSectionId )
       const result = await deleteSubSection({
-        sectionId : sectionId,
-        subsectionId,
-        token
+       subSectionId, 
+       sectionId ,
+       token
       })
 
       if(result){
@@ -110,7 +111,7 @@ const NestedView = ({handleChangeEditSection}) => {
                       <div>
                           {
                             Array.isArray(section?.subsections) &&
-                            section?.subsections.map((subsection) => (
+                            section.subsections.map((subsection) => (
                                 <div 
                                   key={subsection?._id}
                                   onClick={() => {

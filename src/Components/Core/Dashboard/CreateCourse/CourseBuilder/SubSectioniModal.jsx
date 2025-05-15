@@ -105,7 +105,7 @@ const SubSectioniModal = ({ modaldata,setModalData, add = false,  edit = false ,
           }
           else{
               //edit karo 
-              handleEditSubsection()
+              await handleEditSubsection()
           }
           return
       }
