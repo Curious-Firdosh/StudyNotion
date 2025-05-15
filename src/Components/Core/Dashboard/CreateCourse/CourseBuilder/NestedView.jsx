@@ -24,7 +24,7 @@ const NestedView = ({handleChangeEditSection}) => {
     const [viewSubsection, setViewSubsection] = useState(null)
     const [editSubsection, seteditSubsection] = useState(null)
 
-    console.log("addSubsection" , addSubsection)
+    console.log("edit;😒😒", editSubsection)
 
     const [confirmationModal , setConfirmationModal] = useState(null)
 
@@ -38,6 +38,7 @@ const NestedView = ({handleChangeEditSection}) => {
       })
 
       if(result) {
+
         dispatch(setCourse(result))
       }
 
@@ -46,8 +47,8 @@ const NestedView = ({handleChangeEditSection}) => {
     }
 
     const handleDeleteSubSection = async(subSectionId, sectionId ) =>  {
-      
-      console.log(sectionId , subSectionId )
+    
+       //! If I did not add the course to the section model and then populates tha whole course for data updating butif therre is no couse in secion model then 
       const result = await deleteSubSection({
        subSectionId, 
        sectionId ,
@@ -55,6 +56,12 @@ const NestedView = ({handleChangeEditSection}) => {
       })
 
       if(result){
+        
+        // const updatedCourseContent = course?.courseContent.map((section) => section._id === sectionId  ? result : section)
+        // const updatedCourse = {...course , courseContent:updatedCourseContent}
+
+        
+        // and If I did Not Modiefied THe Model Of Section THE sET cOURSE aS UPDATEDcoURSE 
         dispatch(setCourse(result))
       }
       setConfirmationModal(null)
@@ -69,7 +76,7 @@ const NestedView = ({handleChangeEditSection}) => {
                 
 
                 <details key={section._id} open className='border-b-2  border-white pl-5   '>
-                      <summary className='mt-10 text-white flex items-center justify-between  gap-x-3 p-3'>
+                      <summary className=' text-white flex items-center justify-between  gap-x-3 p-3'>
 
                             <div className='flex items-center  gap-3 '>
                                 <RxDropdownMenu/>
@@ -125,10 +132,15 @@ const NestedView = ({handleChangeEditSection}) => {
                                             <p>{subsection.title}</p>
                                         </div>
 
-                                        <div className='flex items-center  gap-x-3'>
+                                        <div 
+                                          onClick={(e) => e.stopPropagation() }
+                                          className='flex items-center  gap-x-3'>
                                             
                                               <button
-                                                onClick={() => seteditSubsection({...subsection , sectionId : section._id})}
+                                                  onClick={() => {
+                                                          console.log("Setting edit subsection:", subsection, "Parent sectionId:", section._id);
+                                                          seteditSubsection({ ...subsection, sectionId: section._id });
+                                                  }}
                                               >
                                                   <MdModeEdit/>
                                               </button>
@@ -156,7 +168,7 @@ const NestedView = ({handleChangeEditSection}) => {
 
                         <button 
                           onClick={() => setaddSubsection(section._id)}
-                          className='flex items-center font-semibold p-1 text-yellow-50 mb-2'>
+                          className='flex items-center font-semibold p-1 text-yellow-50 mt-2'>
                                 <AiOutlinePlus className='font-semibold'/>
                                   Add Lectures
                         </button>
@@ -178,7 +190,7 @@ const NestedView = ({handleChangeEditSection}) => {
               setModalData = {setViewSubsection}
               View =  {true}
           /> 
-          : editSubsection ? <SubSectioniModal
+          : editSubsection ?<SubSectioniModal
                modaldata = {editSubsection}
                setModalData = {seteditSubsection}
                edit =  {true}
