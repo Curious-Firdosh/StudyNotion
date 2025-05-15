@@ -23,6 +23,7 @@ const CourseInformationform = () => {
         handleSubmit,
         setValue,
         getValues,
+        watch,
         formState : {errors}
     }= useForm()
 
@@ -59,7 +60,7 @@ const CourseInformationform = () => {
 
             // if form is in edit mode
             if (editCourse) {
-                // console.log("data populated", editCourse)
+                console.log("data populated", editCourse)
                 setValue("courseTitle", course.courseName)
                 setValue("courseShortDesc", course.courseDescreption)
                 setValue("coursePrice", course.price)
@@ -81,7 +82,7 @@ const CourseInformationform = () => {
 
      if (
             currentValue.courseTitle !== course.courseName ||
-            currentValue.courseShortDesc !== course.courseDescription ||
+            currentValue.courseShortDesc !== course.courseDescreption ||
             currentValue.coursePrice !== course.price ||
             currentValue.courseBenefits !== course.whatYouWillLearn || 
             currentValue.courseTags.toString() !== course.tag.toString() ||
@@ -110,7 +111,7 @@ const CourseInformationform = () => {
                 if(currentValue.courseTitle !== course.courseName){
                     formdata.append("courseName" ,data.courseTitle )
                 }
-                if(currentValue.courseShortDesc !== course.courseDescription){
+                if(currentValue.courseShortDesc !== course.courseDescreption){
                     formdata.append("courseDescription" ,data.courseShortDesc )
                 }
                 if( currentValue.coursePrice !== course.price){
@@ -130,7 +131,7 @@ const CourseInformationform = () => {
                     formdata.append("courseTags" ,JSON.stringify(data.courseTags) )
                 }
 
-                console.log("HelloJI  ")
+         
 
                 setLoading(true)
                 const result = await editCourseDetails(formdata , token)
@@ -149,7 +150,7 @@ const CourseInformationform = () => {
         // If User Is Came To Make New Course First Time 
         const formdata = new FormData();
         formdata.append("courseName" ,data.courseTitle )
-        formdata.append("courseDescription" ,data.courseShortDesc )
+        formdata.append("courseDescreption" ,data.courseShortDesc )
         formdata.append("price" ,data.coursePrice )
         formdata.append("whatYouWillLearn" ,data.courseBenefits )
         formdata.append("category" ,data.courseCategory )
@@ -283,6 +284,7 @@ const CourseInformationform = () => {
             <RequireMentField
                 name = "courseRequirements"
                 label = "Requirements/Instruction"
+                watch = {watch}
                 register = {register}
                 errors = {errors}
                 setValue = {setValue}

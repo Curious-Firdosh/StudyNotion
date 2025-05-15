@@ -24,6 +24,8 @@ const NestedView = ({handleChangeEditSection}) => {
     const [viewSubsection, setViewSubsection] = useState(null)
     const [editSubsection, seteditSubsection] = useState(null)
 
+    console.log("addSubsection" , addSubsection)
+
     const [confirmationModal , setConfirmationModal] = useState(null)
 
     console.log("Section UpdatedCourse" , course.courseContent)
@@ -46,9 +48,8 @@ const NestedView = ({handleChangeEditSection}) => {
     const handleDeleteSubSection = async(subsectionId , sectionId) => {
       
       const result = await deleteSubSection({
-        
+        sectionId : sectionId,
         subsectionId,
-        sectionId,
         token
       })
 
@@ -62,7 +63,9 @@ const NestedView = ({handleChangeEditSection}) => {
     <div>
         <div className='rounded-sm bg-richblack-700  mt-5 '>
             {
+              
                course?.courseContent.map((section) => (
+                
 
                 <details key={section._id} open className='border-b-2  border-white pl-5   '>
                       <summary className='mt-10 text-white flex items-center justify-between  gap-x-3 p-3'>
@@ -106,6 +109,7 @@ const NestedView = ({handleChangeEditSection}) => {
 
                       <div>
                           {
+                            Array.isArray(section?.subsections) &&
                             section?.subsections.map((subsection) => (
                                 <div 
                                   key={subsection?._id}
