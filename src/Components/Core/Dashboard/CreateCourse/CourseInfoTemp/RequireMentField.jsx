@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 
-const RequireMentField = ({name , label , register , errors , setValue , getValues}) => {
+const RequireMentField = ({name , label , watch, register , errors , setValue , getValues}) => {
 
     const [requirement , setRequirement] = useState("")
     const [requirementList , setRequirementList] = useState([])
@@ -10,11 +10,11 @@ const RequireMentField = ({name , label , register , errors , setValue , getValu
 
     useEffect(() => {
         register(name , { required : true , validate : (value) => value.length > 0  })
-    } ,[])
+    } ,[register ,name])
 
     useEffect(() => {
         setValue(name , requirementList)
-    }, [requirementList])
+    }, [requirementList , name , setValue])
 
     const handlOnAdd = () => {
        if(requirement){
@@ -22,6 +22,15 @@ const RequireMentField = ({name , label , register , errors , setValue , getValu
         setRequirement('')
        }
     }
+
+    // useEffect(() => {
+    //     const savedRequirement = watch(name)
+    //         console.log(savedRequirement);
+            
+    //     if(savedRequirement && savedRequirement.length > 0 ){
+    //         setRequirementList(savedRequirement)
+    //     }
+    // },[watch, name])
 
     const handleRemove = (index) => {
         const updateRequireMent = [...requirementList];
@@ -41,6 +50,7 @@ const RequireMentField = ({name , label , register , errors , setValue , getValu
                 value={requirement}
                 onChange={(e) => setRequirement(e.target.value)}
                 className='w-full p-2 text-sm rounded-md'
+                
              />
 
              <button
