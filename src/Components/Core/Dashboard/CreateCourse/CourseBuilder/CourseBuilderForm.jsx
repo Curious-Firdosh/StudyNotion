@@ -39,6 +39,8 @@ const CourseBuilderForm = () => {
         toast.error("All sections must have at least one subsection");
         return;
       }
+      console.log("Hekkkko H=jajsdijis");
+      
       dispatch(setStep(3));
 
   }
@@ -157,16 +159,17 @@ const CourseBuilderForm = () => {
         
             <button 
               onClick={goBack}
-              className='text-sm bg-richblack-300 p-2'>
+              className='text-sm bg-richblack-300 p-2 rounded-md px-2'>
               Back
             </button>
             
-            <IconButton
-              text={"Next"}
-              onClick = {goToNext}
+            <button
+                className='bg-yellow-100 p-1 px-2 flex items-center gap-x-2 rounded-md'
+                onClick={goToNext}
             >
-              <IoIosArrowForward/>
-            </IconButton>
+                Next 
+                <IoIosArrowForward/>
+            </button>
 
         </div>
 
