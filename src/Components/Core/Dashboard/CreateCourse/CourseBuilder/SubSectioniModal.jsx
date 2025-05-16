@@ -85,10 +85,14 @@ const SubSectioniModal = ({ modaldata,setModalData, add = false,  View = false, 
       // }
 
       //! Do Api Call
-      const result =  updateSubSection(formdata , token)
+      const result = await updateSubSection(formdata , token)
 
       
       if(result){
+
+        // const updatedCourseContent = course?.courseContent.map((section) => section._id === modaldata.sectionId  ? result : section)
+        // const updatedCourse = {...course , courseContent:updatedCourseContent}
+
 
         dispatch(setCourse(result))
       }
@@ -141,14 +145,16 @@ const SubSectioniModal = ({ modaldata,setModalData, add = false,  View = false, 
 
 
   return (
-    <div>
+    <div className='bg-richblack-300'>
 
         <div>
             <h1>{View && "Viewing" } {edit && "Editing" } {add && "Adding"} Lectures</h1>
             <RxCross1 onClick={() => setModalData(null)}/>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form 
+        className=''
+        onSubmit={handleSubmit(onSubmit)}>
               
               <div>
                     <div>
