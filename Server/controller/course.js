@@ -74,7 +74,8 @@ exports.createCourse = async (req,res) => {
         language  : language, 
         category: categoryDetails._id,
         // thumbNail : thumbnailImage.secure_url,
-        tag : parsedTags
+        tag : parsedTags,
+        status : "Draft"
     });
 
     // update User [instructer] add the new course to the instructer 
@@ -118,7 +119,6 @@ exports.createCourse = async (req,res) => {
 };
 
 //Show All Course // get all course list 
-
 exports.showAllCourses = async (req,res) => {
     
     try{
@@ -201,12 +201,12 @@ exports.getCourseDetails = async (req,res) => {
 // get a list of course for a given instructer 
 exports.getInstructerCourses = async(req,res) => {
     try {
-        const instructerId = req.user.id 
+        const instructerId = req.User.id 
 
-        const InstructerCourses = await Course.find(
+        const InstructerCourses = await User.find(
             {instructer : instructerId} )
             .sort({created : -1})
-            // .populate("courses")
+            .populate("courses")
          
         return  res.status(200).json({
             success : true ,
