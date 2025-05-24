@@ -32,6 +32,7 @@ const PublishCourse = () => {
     const goToCourses = (data) => {
       dispatch(resetCourseState())
     
+    
       
     }
     
